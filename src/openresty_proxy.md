@@ -1,15 +1,14 @@
 ## 基于openresty开发轻量级,按流量控制的灰度模块
 ---
-### 1.灰度发布解决什么问题
+### 1.为什么要灰度发布
 * 解决系统重构老系统向新系统平滑迁移
+* 按流量控制灰度,可以降低风险,有问题只影响极少了用户
 
 ### 2.设计思路
-* 大致流程图
-
+* 大致流程图,利用lua开发nginx模块动态路由控制,采用请求计数器,弱流量在流控范围内,走新系统,否则走老系统。
  ![gray](../images/gray.jpg)
  
 ### 3.实现代码
-* openresty安装: 略
 * 灰度配置文件
 ```shell script
 -- Copyright (C) www.bytearch.com (iyw)
@@ -256,5 +255,4 @@ openresty -c /usr/local/openresty/nginx/conf/nginx.conf
 
 ### 5.总结:
   实际场景可能更为复杂,比如可能会根据请求参数灰度策略,这些都可以根据实际很容易情况定制开发。
-源代码已开源(https://github.com/bytearch/gray) 欢迎star,谢谢大家!
-    
+源代码请移步(https://github.com/bytearch/gray) 欢迎star,谢谢大家!

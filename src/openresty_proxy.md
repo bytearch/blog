@@ -11,7 +11,7 @@
 ### 3.实现代码
 * openresty安装: 略
 * 灰度配置文件
-```lua
+```shell script
 -- Copyright (C) www.bytearch.com (iyw)
 local _M = {
     _VERSION = "0.0.2"
@@ -68,7 +68,7 @@ return _M
 |  must_proxy_new_uri_list| 白名单uri| 指定走新系统uri|
 
 * 灰度模块开发
-```lua
+```shell script
     -- Copyright (C) www.bytearch.com (iyw)
     local config = require("gray.config")
     
@@ -255,6 +255,6 @@ openresty -c /usr/local/openresty/nginx/conf/nginx.conf
 ![test](../images/gray_test.png)
 
 ### 5.总结:
-    实际场景可能更为复杂,比如可能会根据请求参数灰度策略,这些都可以根据实际很容易情况定制开发。
-    源代码已开源(https://github.com/bytearch/gray) 欢迎star,谢谢大家!
+  实际场景可能更为复杂,比如可能会根据请求参数灰度策略,这些都可以根据实际很容易情况定制开发。
+源代码已开源(https://github.com/bytearch/gray) 欢迎star,谢谢大家!
     

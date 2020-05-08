@@ -158,8 +158,8 @@ return _M
 ```
 
 ### 4.测试
+* test_old.conf 9001端口
 ```shell script
-## test_old.conf 9001端口
 server{
     listen 9001;
     server_name localhost;
@@ -182,7 +182,10 @@ server{
         ';
     }
 }
-##test_new.conf 9002端口
+```
+
+* test_new.conf 9002端口
+```shell script
 server{
     listen 9002;
     server_name localhost;
@@ -205,7 +208,9 @@ server{
         ';
     }
 }
-### 反向代理 9000端口
+```
+* 反向代理 9000端口
+```shell script
 #此处配置新老系统地址
 upstream proxy_old {
     server localhost:9001 max_fails=3 fail_timeout=2s;

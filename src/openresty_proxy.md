@@ -5,12 +5,28 @@
 * 按流量控制灰度,可以降低风险,有问题只影响极少了用户
 
 ### 2.设计思路
-* 大致流程图,利用lua开发nginx模块动态路由控制,采用请求计数器,弱流量在流控范围内,走新系统,否则走老系统。
+首先看看openresty指令执行顺序
+![openresty](../images/openresty.png)
+
+|指令      |      说明  |
+|---------|-------------|
+|init_by_lua* |初始化 nginx 和预加载 lua(nginx 启动和 reload 时执行)|
+|init_worker_by_lua* |每个工作进程(worker_processes)被创建时执行，用于启动一些定时任务，比如心跳检查，后端服务的健康检查，定时拉取服务器配置等|
+|ssl_certificate_by_lua*|对 https 请求的处理，即将启动下游 SSL（https）连接的 SSL 握手时执行，用例：按照每个请求设置 SSL 证书链和相应的私钥，按照 SSL 协议有选择的拒绝请求等|
+|set_by_lua* |设置 nginx 变量|
+|rewrite_by_lua* |重写请求（从原生 nginx 的 rewrite 阶段进入），执行内部 URL 重写或者外部重定向，典型的如伪静态化的 URL 重写|
+|access_by_lua* |处理请求（和 rewrite_by_lua 可以实现相同的功能，从原生 nginx 的 access阶段进入）|
+|content_by_lua* |执行业务逻辑并产生响应，类似于 jsp 中的 servlet|
+|balancer_by_lua* |负载均衡|
+|header_filter_by_lua* |处理响应头|
+|body_filter_by_lua* |处理响应体|
+|log_by_lua* |记录访问日志|
+* 所以我们可以在 rewrite_by_lua* 阶段利用lua开发nginx模块动态路由控制,采用请求计数器,若流量在流控范围内,走新系统,否则走老系统。大致流程图如下:
  ![gray](../images/gray.jpg)
  
 ### 3.实现代码
 * 灰度配置文件
-```shell script
+```lua
 -- Copyright (C) www.bytearch.com (iyw)
 local _M = {
     _VERSION = "0.0.2"
@@ -67,7 +83,7 @@ return _M
 |  must_proxy_new_uri_list| 白名单uri| 指定走新系统uri|
 
 * 灰度模块开发
-```shell script
+```lua
     -- Copyright (C) www.bytearch.com (iyw)
     local config = require("gray.config")
     
@@ -159,7 +175,7 @@ return _M
 
 ### 4.测试
 * test_old.conf 9001端口
-```shell script
+```
 server{
     listen 9001;
     server_name localhost;
@@ -185,7 +201,7 @@ server{
 ```
 
 * test_new.conf 9002端口
-```shell script
+```
 server{
     listen 9002;
     server_name localhost;
@@ -210,7 +226,7 @@ server{
 }
 ```
 * 反向代理 9000端口
-```shell script
+```
 #此处配置新老系统地址
 upstream proxy_old {
     server localhost:9001 max_fails=3 fail_timeout=2s;
@@ -252,7 +268,7 @@ server{
 ```
 * 更改配置proxy_percent.new = 5,  proxy_percent.base = 100 (即5%流量转发到新系统)
 * 启动openresty
-```shell script
+```
 openresty -c /usr/local/openresty/nginx/conf/nginx.conf 
 ```
 测试如下

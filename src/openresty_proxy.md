@@ -21,7 +21,9 @@
 |header_filter_by_lua* |处理响应头|
 |body_filter_by_lua* |处理响应体|
 |log_by_lua* |记录访问日志|
+
 * 所以我们可以在 rewrite_by_lua* 阶段利用lua开发nginx模块动态路由控制,采用请求计数器,若流量在流控范围内,走新系统,否则走老系统。大致流程图如下:
+
  ![gray](../images/gray.jpg)
  
 ### 3.实现代码

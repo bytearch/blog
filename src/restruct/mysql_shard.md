@@ -25,27 +25,25 @@ CREATE TABLE `kv` (
   `value` varchar(3000) NOT NULL DEFAULT '' COMMENT '存储value',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '字段类型: 1: string , 2: json',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `order_id` (`order_id`,`key`),
+  PRIMARY KEY (`id`,`name`),
   KEY `idx_create_time` (`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单扩展字段KV表';
 ```
 
 
-
 ##### 1. 确定shardingKey
 
-对于扩展字段查询,只会根据id + key 或者 id 为条件的方式查询,所以这里我们可以按照id sharding即可
+对于kv扩展字段查询,只会根据id + key 或者 id 为条件的方式查询,所以这里我们可以按照id 分片即可
 
 ##### 2. 确定拆分表数量
 
 分512张表(实际场景具体分多少表还得根据字段增加的频次而定)
 
-分表后表名为order_kv_000  ~  order_kv_511
+分表后表名为kv_000  ~  kv_511
 
-id % 512 = 1 .... 分到 order_kv_001,
+id % 512 = 1 .... 分到 kv_001,
 
-id % 512 = 2 .... 分到 order_kv_002
+id % 512 = 2 .... 分到 kv_002
 
 依次类推!
 
@@ -113,11 +111,11 @@ select id, key, value,create_time,type from kv_001 where id = 1 and key = "domai
 
 ##### 2) 确定分库数量
 
-分1024个库,按照user_id % 1024 hash
+假如分1024个库,按照user_id % 1024 hash
 
-user_id % 1024 = 1  分到db_001
+user_id % 1024 = 1  分到db_001库
 
-user_id % 1024 = 2 分到db_002
+user_id % 1024 = 2 分到db_002库
 
 依次类推
 
@@ -145,10 +143,7 @@ user_id % 1024 = 2 分到db_002
 * nosql法: 将全量数据存到ES,查询ES
 
 
-
-
-
-### 四、基于mybatis插件水平拆库拆表
+### 四、基于mybatis插件水平分库分表
 
 基于mybatis分库分表,一般常用的一种是基于spring AOP方式, 另外一种基于mybatis插件。其实两种方式思路差不多。
 

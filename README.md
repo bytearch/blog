@@ -6,7 +6,7 @@
 
 微信订阅号: 浅谈架构
 
-![bytearch](http://storage.bytearch.com/qrcode_for_gh_new.jpg)
+![bytearch](http://storage.bytearch.com/images/qrcode_demo_bytearch.jpg)
 
 [0. 浅谈架构-关于我](src/about.md)
 
@@ -21,5 +21,5 @@
 |前言|[浅谈千万级系统重构](./src/restruct/restruct.md)|
 |第一节|[基于openresty(nginx+lua)开发轻量级,按流量控制的灰度模块](./src/restruct/openresty_proxy.md)|
 |第二节|[浅谈唯一Id生成器最佳实践](./src/restruct/sequenceId.md)|
-|第三节|浅谈mysql分库分表那些事儿|
+|第三节|[浅谈mysql分库分表那些事儿](./src/restruct/mysql_shard.md)|
 |第四节|浅谈基于MQ&binlog同步数据双写方案|

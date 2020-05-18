@@ -83,9 +83,53 @@ select id, key, value,create_time,type from kv_001 where id = 1 and key = "domai
 
 ### 三、水平拆库
 
-场景:以下我们基于图片存储系统分库场景来分析
+场景:以下我们基于博客文章表分库场景来分析
 
-[!架构图](../images/sharding_db.jpg)
+目标:
 
-​      
+1. 分成1024张库, 000-511号库共用数据节点node1(一个数据节点保护一主多从数据源), 512~1023号库用数据节点node2
+
+2. 支持读写分离
+
+表结构如下(节选部分字段):
+
+```sql
+ CREATE TABLE IF NOT EXISTS `article` (
+  `id` bigint(20) NOT NULL COMMENT '文章id',
+  `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '作者id',
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '文章状态 -1: 删除 1:草稿 2:已发布' ,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_create_time` (`create_time`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '订单信息表';
+```
+
+##### 1)确定shardingKey
+
+按照user_id sharding
+
+##### 2) 确定分库数量
+
+分1024个库,按照user_id % 1024 hash
+
+user_id % 1024 = 1  分到db_001
+
+user_id % 1024 = 2 分到db_002
+
+依次类推
+
+#### 3) 架构图如下
+
+![架构图](http://storage.bytearch.com/images/sharding_db.jpg)
+
+      ##### 4)后期线性扩容问题
+
+目前是2个节点,假如后期达到瓶颈,我们可以增加至4个节点
+
+![sharding_db_4](../images/sharding_db_4.jpg)
+
+
 

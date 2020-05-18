@@ -17,11 +17,9 @@
 ### 《浅谈千万级系统重构系列》
 
 |章节| 目录|
-|:---:|:----| 
-|前言|[浅谈千万级系统重构](./src/restruct.md)|
-|第一节|[基于openresty(nginx+lua)开发轻量级,按流量控制的灰度模块](./src/openresty_proxy.md)|
-|第二节|[浅谈唯一Id生成器最佳实践](./src/sequenceId.md)|
+|:---:|:----|
+|前言|[浅谈千万级系统重构](./src/restruct/restruct.md)|
+|第一节|[基于openresty(nginx+lua)开发轻量级,按流量控制的灰度模块](./src/restruct/openresty_proxy.md)|
+|第二节|[浅谈唯一Id生成器最佳实践](./src/restruct/sequenceId.md)|
 |第三节|浅谈mysql分库分表那些事儿|
 |第四节|浅谈基于MQ&binlog同步数据双写方案|
-|第五节|浅谈数据双写之对比工具实现方案  |`
-

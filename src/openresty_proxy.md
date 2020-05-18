@@ -6,7 +6,7 @@
 
 ### 2.设计思路
 首先看看openresty指令执行顺序
-![openresty](../images/openresty.png)
+![openresty](http://storage.bytearch.com/images/openresty.png)
 
 |指令      |      说明  |
 |---------|-------------|
@@ -24,7 +24,7 @@
 
 * 所以我们可以在 rewrite_by_lua* 阶段利用lua开发nginx模块动态路由控制,采用请求计数器,若流量在流控范围内,走新系统,否则走老系统。大致流程图如下:
 
- ![gray](../images/gray.jpg)
+ ![gray](http://storage.bytearch.com/images/gray.jpg)
  
 ### 3.实现代码
 * 灰度配置文件
@@ -274,7 +274,7 @@ server{
 openresty -c /usr/local/openresty/nginx/conf/nginx.conf 
 ```
 测试如下
-![test](../images/gray_test.png)
+![test](http://storage.bytearch.com/images/gray_test.png)
 
 ### 5.总结:
   实际场景可能更为复杂,比如可能会根据请求参数灰度策略,这些都可以根据实际很容易情况定制开发。

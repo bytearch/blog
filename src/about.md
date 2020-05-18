@@ -14,9 +14,8 @@
 
 公众号: 浅谈架构 
 
-![浅谈架构](../images/qrcode_for_gh_new.jpg)
+![浅谈架构](http://storage.bytearch.com/images/qrcode_for_gh_new.jpg)
 
 ### 意见反馈
 
 若本号内容有做得不到位的地方(比如:涉及版权或其他问题),请即时联系我们进行整改。
-

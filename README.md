@@ -6,7 +6,7 @@
 
 微信订阅号: 浅谈架构
 
-![bytearch](./images/qrcode_for_gh_new.jpg)
+![bytearch](http://storage.bytearch.com/qrcode_for_gh_new.jpg)
 
 [0. 浅谈架构-关于我](src/about.md)
 

@@ -15,3 +15,9 @@
     }*/
 ```
 
+
+
+```
+//@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "id", resultType = Long.class, before = false)
+```
+

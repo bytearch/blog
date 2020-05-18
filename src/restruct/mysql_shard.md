@@ -146,11 +146,13 @@ user_id % 1024 = 2 分到db_002
 
 
 
+
+
 ### 四、基于mybatis插件水平拆库拆表
 
 基于mybatis分库分表,一般常用的一种是基于spring AOP方式, 另外一种基于mybatis插件。其实两种方式思路差不多。
 
-##### 1). 基于mybatis分库得首先解决如下问题
+#####  基于mybatis分库得首先解决如下问题
 
 * 1. 如何根据shardingKey选择不同的数据源
 
@@ -158,9 +160,9 @@ user_id % 1024 = 2 分到db_002
 
 * 3. 在哪个阶段 更改sql语句(也就是需要更改库名&表名, 解决了问题1和问题2,问题3就很容易解决了)
 
-问题1: 使用Spring的AbstractRoutingDataSource进行数据源的动态切换,原理是使用ThreadLocal先存储数据源key,等需要的的时候获取。
+##### 问题1: 使用Spring的AbstractRoutingDataSource进行数据源的动态切换,原理是使用ThreadLocal先存储数据源key,等需要的的时候获取。
 
-问题2: 这个问题得先分析一下mybatis四大类和插件执行流程,也就是找出也就是分析Executor 和StatementHandler哪个在获取属于源之前执行
+##### 问题2: 这个问题得先分析一下mybatis四大类和插件执行流程,也就是找出也就是分析Executor 和StatementHandler哪个在获取属于源之前执行
 
 ![mybatis插件四大类](http://storage.bytearch.com/images/mybatis_plugin_4.jpg)
 
@@ -281,14 +283,28 @@ public class DynamicDatasource extends AbstractRoutingDataSource {
 
 
 
-
-
 有此可知,我们需要在Executor阶段 切换数据源
 
-问题3: 可以在Executor切换完数据库完成之后, 更改sql, 或者在StatementHandler阶段更改sql
+##### 问题3: 可以在Executor切换完数据库完成之后, 更改sql, 或者在StatementHandler阶段更改sql
+
+对于分库:
+
+原始sql:
+
+```sql
+insert into article(id, uid, status,create_time,update_time) value(201333425976180992L, 1, 1, '2020-05-17 00:00:00', '2020-05-17 00:00:00')
+```
+
+目标sql:
+
+```sql
+insert into ba_test_001.article (id, user_id, status,create_time,update_time) value(201333425976180992L, 1, 1, '2020-05-17 00:00:00', '2020-05-17 00:00:00')
+```
 
 
-#### 完整拦截插件如下
+
+
+#### 完整插件如下
 
 ```java
 package com.bytearch.mybatis.sharding.plugin;
@@ -391,7 +407,7 @@ public class ShardingInterceptor implements Interceptor {
                     }
                 }
                 if (partitionKey != null) {
-                    log.info("[获取到partitionKey:{}]", partitionKey);
+                     log.info("获取到shardingKey:{}]", partitionKey);
                     //权重 分库 < 分表 < 分库分表(原则上同一Mapper策略只配置一种,如果配置多种依次覆盖)
                     //分库
                     IDatabaseShardingStrategy databaseShardingStrategy = ShardingStrategyUtils.getDatabaseShardingStrategy(DB);
@@ -428,6 +444,7 @@ public class ShardingInterceptor implements Interceptor {
                 if (sqlNeedChanged) {
                     BoundSql boundSql = ms.getBoundSql(pa);
                     String originSql = boundSql.getSql();
+                    log.info("[原始SQL] sql:{}", originSql);
                     String sql = originSql.replaceAll(DB.tableName(), schema + '.' + tableName);
                     log.info("[更改SQL] sql:{}", sql);
                     BoundSql boundSqlNew = new BoundSql(ms.getConfiguration(), sql, boundSql.getParameterMappings(), boundSql.getParameterObject());
@@ -487,7 +504,187 @@ public class ShardingInterceptor implements Interceptor {
 }
 ```
 
-此插件具体实现方案已开源(https://github.com/bytearch/mybatis-sharding),目录如下,有不当之处,欢迎指正!
+其中定义了三个注解
+
+@useMaster 是否强制读主
+
+```java
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+public @interface UseMaster {
+}
+```
+
+@shardingBy 分片标识
+
+```java
+/**
+ *
+ * @ShardingBy作用于方法 和 Bean属性  优先级 方法 > 属性
+ * @author yarw
+ */
+@Target({ElementType.FIELD, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+public @interface ShardingBy {
+    /**
+     * 指定分片参数
+     * @return
+     */
+    String value() default ShardingConstant.DEFAULT_PARTITION_KEY_NAME;
+}
+```
+
+@DB 定义逻辑表名 库名以及分片策略
+
+```java
+package com.bytearch.mybatis.sharding.annotation;
+
+import com.bytearch.mybatis.sharding.strategy.IDatabaseShardingStrategy;
+import com.bytearch.mybatis.sharding.strategy.IShardingStrategy;
+import com.bytearch.mybatis.sharding.strategy.ITableShardingStrategy;
+import com.bytearch.mybatis.sharding.strategy.impl.NotUseDatabaseShardingStrategy;
+import com.bytearch.mybatis.sharding.strategy.impl.NotUseShardingStrategy;
+import com.bytearch.mybatis.sharding.strategy.impl.NotUseTableShardingStrategy;
+
+import java.lang.annotation.*;
+
+/**
+ * @author yarw
+ */
+@Target({ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+public @interface DB {
+    /**
+     * 分表切分策略
+     *
+     * @return
+     */
+    Class<? extends ITableShardingStrategy> tableShardingStrategy() default NotUseTableShardingStrategy.class;
+
+    /**
+     * 分库切分策略
+     *
+     * @return
+     */
+    Class<? extends IDatabaseShardingStrategy> databaseShardingStrategy() default NotUseDatabaseShardingStrategy.class;
+
+    /**
+     * 分库&分表切分策略
+     * @return
+     */
+    Class<? extends IShardingStrategy> shardingStrategy() default NotUseShardingStrategy.class;
+
+    /**
+     * 逻辑表名
+     *
+     * @return
+     */
+    String tableName();
+
+    /**
+     * 逻辑库名
+     *
+     * @return
+     */
+    String schema();
+
+}
+```
+
+
+
+#### 测试走一波
+
+1)编写entity
+
+```java
+package com.bytearch.mybatis.sharding.entity;
+
+import java.util.Date;
+
+import com.bytearch.mybatis.sharding.annotation.ShardingBy;
+import lombok.Data;
+
+@Data
+public class Article {
+    /**
+     * 文章id
+     */
+    private Long id;
+
+    /**
+     * 作者id
+     * 可以在此处通过注解指定shardingKey
+     */
+    @ShardingBy
+    private Long userId;
+
+    /**
+     * 文章状态 -1: 删除 1:草稿 2:已发布
+     */
+    private Byte status;
+
+    private Date createTime;
+
+    private Date updateTime;
+}
+```
+
+2) 编写mapper
+
+```java
+/**
+ * @author yarw
+ */
+@DB(databaseShardingStrategy = LongHashDatabasePartitionStrategy.class, schema = "blog", tableName = "article")
+@Mapper
+public interface ArticleShardingMapper {
+    /**
+    * 也可以通过参数指定shardingKey参数
+    */
+    @Select("select * from article where id = #{id}")
+    @ShardingBy("shardingKey")
+    Article selectById(@Param("id") Long id, @Param("shardingKey") Long shardingKey);
+
+    @Insert("insert into article (id, user_id, status,create_time,update_time) value(#{id}, #{userId}, #{status}, #{createTime}, #{updateTime})")
+    int insert(Article kv);
+}
+```
+
+3) 编写测试类
+
+```JAVA
+@Test
+    public void insertArticleTest() {
+        Article article = new Article();
+        Long userId = 1L;
+        article.setId(SeqIdUtil.nextId(userId));
+        article.setUserId(userId);
+        article.setStatus((byte)1);
+        article.setCreateTime(new Date());
+        article.setUpdateTime(new Date());
+        articleShardingMapper.insert(article);
+    }
+    @Test
+    public void selectArticleTest() {
+        Article article = articleShardingMapper.selectById(201364919411081472L, SeqIdUtil.decodeId(201364919411081472L).getExtraId());
+        System.out.println(article);
+    }
+```
+
+4) 测试结果
+
+
+
+
+
+此插件具体实现方案已开源: https://github.com/bytearch/mybatis-sharding
 
 ```
 .

@@ -14,7 +14,7 @@
 
 公众号: 浅谈架构 
 
-![浅谈架构](http://storage.bytearch.com/images/qrcode_for_gh_new.jpg)
+![浅谈架构](http://storage.bytearch.com/images/qrcode_demo_bytearch.jpg)
 
 ### 意见反馈
 

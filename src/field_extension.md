@@ -22,17 +22,15 @@
 * kv表结构设计
 
 ```sql
-CREATE TABLE `order_kv` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `order_id` varchar(30) NOT NULL COMMENT '订单编号',
+CREATE TABLE `kv` (
+  `id` bigint(20) NOT NULL,
   `key` varchar(30) NOT NULL COMMENT '存储字段名',
   `value` varchar(3000) NOT NULL DEFAULT '' COMMENT '存储value',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '字段类型: 1: string , 2: json',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `order_id` (`order_id`,`key`),
+  PRIMARY KEY (`id`, `key`),
   KEY `idx_create_time` (`create_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单扩展字段KV表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='扩展字段KV表';
 ```
 
 *注 :实际场景中会对kv表进行分表/分库, 因为都是id维度,可以按照id 取hash 分表/分库*

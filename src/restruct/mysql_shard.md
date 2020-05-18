@@ -125,7 +125,7 @@ user_id % 1024 = 2 分到db_002
 
 ![架构图](http://storage.bytearch.com/images/sharding_db.jpg)
 
-      ##### 4)性能线性增长
+##### 4) 性能线性增长
 
 目前是2个节点,假如后期达到瓶颈,我们可以增加至4个节点
 
@@ -135,7 +135,7 @@ user_id % 1024 = 2 分到db_002
 
 最多可以增加只1024个节点,性能线性增长
 
-#####5) 非shardingKey查询问题
+##### 5) 非shardingKey查询问题
 
 对于水平分表/分库后,非shardingKey查询首先得考虑到
 
@@ -150,7 +150,7 @@ user_id % 1024 = 2 分到db_002
 
 基于mybatis分库分表,一般常用的一种是基于spring AOP方式, 另外一种基于mybatis插件。其实两种方式思路差不多。
 
-基于mybatis分库得首先解决如下问题
+##### 1). 基于mybatis分库得首先解决如下问题
 
 * 1. 如何根据shardingKey选择不同的数据源
 
@@ -286,7 +286,6 @@ public class DynamicDatasource extends AbstractRoutingDataSource {
 有此可知,我们需要在Executor阶段 切换数据源
 
 问题3: 可以在Executor切换完数据库完成之后, 更改sql, 或者在StatementHandler阶段更改sql
-
 
 
 #### 完整拦截插件如下

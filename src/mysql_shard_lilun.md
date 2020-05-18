@@ -51,7 +51,7 @@ id % 512 = 2 .... 分到 order_kv_002
 
 ##### 3. 水平分表思路
 
-先看看未拆分前sql语句
+###### 先看看未拆分前sql语句
 
 1) insert 
 
@@ -65,11 +65,27 @@ insert into kv(id, key, value,create_time,type) value(1, "domain", "www.bytearch
 select id, key, value,create_time,type from kv where id = 1 and key = "domain";
 ```
 
-我们可以通过动态更改sql语句(业务层或者代理方式)
+###### 我们可以通过动态更改sql语句表名,拆分后sql语句
+
+1) insert 
+
+```sql
+insert into kv_001 (id, key, value,create_time,type) value(1, "domain", "www.bytearch.com", "2020-05-17 00:00:00", 1);
+```
+
+2) select 
+
+```sql
+select id, key, value,create_time,type from kv_001 where id = 1 and key = "domain";
+```
+
+水平分表相对比较容易,后面会讲到基于mybatis插件实现方案
 
 ### 三、水平拆库
 
-   
+场景:以下我们基于图片存储系统分库场景来分析
 
-​     
+[!架构图](../images/sharding_db.jpg)
+
+​      
 

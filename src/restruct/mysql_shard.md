@@ -680,11 +680,19 @@ public interface ArticleShardingMapper {
 
 4) 测试结果
 
+Insert
 
+![insert()](http://storage.bytearch.com/images/article_insert_test.png)
 
+select
 
+![query](http://storage.bytearch.com/images/article_select_test.png)
+
+以上顺利实现mysql分库,同样的道理实现同时分库分表也很容易实现。
 
 此插件具体实现方案已开源: https://github.com/bytearch/mybatis-sharding
+
+目录如下:
 
 ```
 .
@@ -758,4 +766,8 @@ public interface ArticleShardingMapper {
 ### 五、总结
 mysql分库分表,首先得找到瓶颈在哪里(IO or CPU),是分库还是分表,分多少？不能为了分库分表而拆分。
 原则上是尽量先垂直拆分 后 水平拆分。
-以上基于mybatis插件分库分表是一种实现思路,还有很多不完善的地方,仅供参考!有其它思路可以联系我一起交流.
+以上基于mybatis插件分库分表是一种实现思路,还有很多不完善的地方,
+
+例如: 目前sql是直接替换的,这里有很大隐患, 例如分库后,事务的如何处理等等
+
+以上仅供参考!有其它思路可以欢迎联系我一起交流.

@@ -278,7 +278,7 @@ public class DynamicDatasource extends AbstractRoutingDataSource {
 
 
 
-有此可知,我们需要在Executor阶段 切换数据源
+由此可知,我们需要在Executor阶段 切换数据源
 
 ##### 问题3: 可以在Executor切换完数据库完成之后, 更改sql, 或者在StatementHandler阶段更改sql
 
@@ -762,7 +762,7 @@ select
 mysql分库分表,首先得找到瓶颈在哪里(IO or CPU),是分库还是分表,分多少？不能为了分库分表而拆分。
 原则上是尽量先垂直拆分 后 水平拆分。
 以上基于mybatis插件分库分表是一种实现思路,还有很多不完善的地方,
-
-例如: 目前sql是直接替换的,这里有很大隐患, 例如分库后,事务的如何处理等等
-
+例如: 
+* 目前sql是直接替换的,这里有很大隐患, 
+* 分库后,跨库事务的如何处理等等
 以上仅供参考!有其它思路可以欢迎联系我一起交流.

@@ -7,19 +7,19 @@
 
 ### 二、重构那些事
  * 单体架构
- ![单体架构](http://storage.bytearch.com/single_struct.jpg)
+ ![单体架构](http://storage.bytearch.com/images/single_struct.jpg)
 随着业务的发展,单体架构问题逐渐暴露
 1) 业务越来越复杂，单体架构扩展性不足，业务扩展带来的代价越来越大
 2) 数据库单点写入瓶颈,mysql数据量太大查询效率不高
 3) 改动一个点可能导致其它地方出问题
 所以系统重构显得尤为重要!
 * 微服务架构
-![微服务架构](http://storage.bytearch.com/micro_project.jpg)
+![微服务架构](http://storage.bytearch.com/images/micro_project.jpg)
 数据库层一般会分库/分表,以订单系统为例
-![订单系统](http://storage.bytearch.com/order_project.jpg)
+![订单系统](http://storage.bytearch.com/images/order_project.jpg)
 
 ### 三、如何从单体架构过渡到微服务架构
-![方案](http://storage.bytearch.com/project-gray.jpg)
+![方案](http://storage.bytearch.com/images/project-gray.jpg)
 * 入口层采用按流量灰度，流量逐步增大,降低风险
 * db层双向同步,一旦有问题可以随时回滚到老系统,并且一般情况下新系统会分库分表
 * 数据对比工具,实时/手动对比数据是否一致,提前发现潜在的问题

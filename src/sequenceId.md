@@ -16,7 +16,7 @@
 * 类似Twitter的Snowflake算法，它给每台机器分配一个唯一标识，然后通过时间戳+标识+自增实现全局唯一ID。
 优点:ID生成算法完全是一个无状态机，无网络调用，高效可靠。
 缺点:是如果唯一标识有重复，会造成ID冲突。
-![雪花算法](http://storage.bytearch.com/snowflake-64bit.jpg)
+![雪花算法](http://storage.bytearch.com/images/snowflake-64bit.jpg)
 (以上图片来源于网络)
 
 ### 3、唯一Id最佳实践

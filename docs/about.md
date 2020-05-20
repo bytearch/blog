@@ -10,7 +10,7 @@
 
 邮箱: bytearch@126.com
 
-技术博客:http://www.bytearch.com
+技术博客: http://www.bytearch.com
 
 公众号: 浅谈架构 
 

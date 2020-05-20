@@ -9,7 +9,7 @@ module.exports = {
             {
                 text: '主题',
                 items: [
-                    {text: "系统重构", link: '/theme/'}
+                    {text: "系统重构", link: '/theme/restruct'}
                 ]
             },
             {text: '关于我', link: '/about'},
@@ -17,25 +17,27 @@ module.exports = {
         ],
         logo: 'http://storage.bytearch.com/images/demo.jpeg',
         sidebarDepth: 3,
+        sidebar: {
+            '/theme/': [
+                {
+                    title: "千万级系统重构",
+                    collapsable: false,
+                    children: [
+                        "/theme/restruct.md",
+                        "/theme/openresty_proxy.md",
+                        "/theme/sequenceId.md",
+                        "/theme/mysql_shard.md",
+                    ]
+                }
+
+            ],
+            '/summary/': [
+                {
+                    title: "归档", collapsable: false
+                }
+            ]
+
+        }
     },
-    sidebar: {
-        '/theme/': [
-            '/theme/restruct',
-            {
-                title: "千万级系统重构",
-                collapsable: false,
-                children: [
-                    "/theme/mysql_shard.md",
-                    "/theme/sequenceId.md"
-                ]
-            }
 
-        ],
-        '/summary/': [
-            {
-                title: "归档", collapsable: false
-            }
-        ]
-
-    }
 }

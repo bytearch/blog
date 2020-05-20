@@ -10,9 +10,9 @@
 
 [0. 浅谈架构-关于我](docs/about.md)
 
-[1. 浅谈架构-浅谈扩展字段设计](docs/field_extension.md)
+[1. 浅谈架构-浅谈扩展字段设计](docs/something/field_extension.md)
 
-[2. 浅谈架构-浅谈轻量级socket连接池设计](docs/socket_pool.md)
+[2. 浅谈架构-浅谈轻量级socket连接池设计](docs/something/socket_pool.md)
 
 ### 《浅谈千万级系统重构系列》
 

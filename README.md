@@ -8,18 +8,18 @@
 
 ![bytearch](http://storage.bytearch.com/images/qrcode_demo_bytearch.jpg)
 
-[0. 浅谈架构-关于我](src/about.md)
+[0. 浅谈架构-关于我](docs/about.md)
 
-[1. 浅谈架构-浅谈扩展字段设计](src/field_extension.md)
+[1. 浅谈架构-浅谈扩展字段设计](docs/field_extension.md)
 
-[2. 浅谈架构-浅谈轻量级socket连接池设计](src/socket_pool.md)
+[2. 浅谈架构-浅谈轻量级socket连接池设计](docs/socket_pool.md)
 
 ### 《浅谈千万级系统重构系列》
 
 |章节| 目录|
 |:---:|:----|
-|前言|[浅谈千万级系统重构](./src/restruct/restruct.md)|
-|第一节|[基于openresty(nginx+lua)开发轻量级,按流量控制的灰度模块](./src/restruct/openresty_proxy.md)|
-|第二节|[浅谈唯一Id生成器最佳实践](./src/restruct/sequenceId.md)|
-|第三节|[浅谈mysql分库分表那些事儿](./src/restruct/mysql_shard.md)|
+|前言|[浅谈千万级系统重构](docs/theme/restruct.md)|
+|第一节|[基于openresty(nginx+lua)开发轻量级,按流量控制的灰度模块](docs/theme/openresty_proxy.md)|
+|第二节|[浅谈唯一Id生成器最佳实践](docs/theme/sequenceId.md)|
+|第三节|[浅谈mysql分库分表那些事儿](docs/theme/mysql_shard.md)|
 |第四节|浅谈基于MQ&binlog同步数据双写方案|

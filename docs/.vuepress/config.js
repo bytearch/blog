@@ -1,43 +1,51 @@
 module.exports = {
-    title: '浅谈架构',
-    description: '分享技术、所见、所闻、所感',
+    title: 'BYTEARCH',
+    //theme: '@vuepress/blog',
+    theme: require.resolve('./theme'),
     themeConfig: {
+        dateFormat: 'YYYY-MM-DD',
         docsDir: 'docs',
+        docsBranch: 'master',
         nav: [
             {text: '首页', link: '/'},
-            {text: '归档', link: '/summary'},
-            {
-                text: '主题',
-                items: [
-                    {text: "系统重构", link: '/theme/restruct'}
-                ]
-            },
+            {text: '标签', link: '/tag/'},
             {text: '关于我', link: '/about'},
-            {text: 'GitHub', link: 'https://www.github.com/bytearch/blog'},
+            {text: 'GitHub', link: 'https://www.github.com/bytearch'},
+
         ],
-        logo: 'http://storage.bytearch.com/images/demo.jpeg',
-        sidebarDepth: 3,
-        sidebar: {
-            '/theme/': [
+        footer: {
+            contact: [
                 {
-                    title: "千万级系统重构",
-                    collapsable: false,
-                    children: [
-                        "/theme/restruct.md",
-                        "/theme/openresty_proxy.md",
-                        "/theme/sequenceId.md",
-                        "/theme/mysql_shard.md",
-                    ]
-                }
-
+                    type: 'github',
+                    link: 'https://github.com/bytearch/blog',
+                },
             ],
-            '/summary/': [
+            copyright: [
                 {
-                    title: "归档", collapsable: false
-                }
+                    text: 'Copyright © 2020 浅谈架构 | 京ICP备20016259号-1',
+                    link: 'http://www.bytearch.com',
+                },
             ]
-
-        }
+        },
+        directories: [
+            {
+                id: 'post',
+                dirname: 'post',
+                path: '/',
+            },
+        ],
+        globalPagination: {
+            prevText: '上一页', // Text for previous links.
+            nextText: '下一页', // Text for next links.
+            lengthPerPage: '5', // Maximum number of posts per page.
+            layout: 'Pagination', // Layout for pagination page
+        },
+        smoothScroll: true,
+        summary: true,
     },
-
+    plugins: [
+        ['@vuepress/search', {
+            searchMaxSuggestions: 5
+        }]
+    ]
 }

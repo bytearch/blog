@@ -1,0 +1,43 @@
+module.exports = {
+    title: '浅谈架构',
+    description: '分享技术、所见、所闻、所感',
+    markdown: { // markdown 配置
+        lineNumbers: false
+    },
+    /*themeConfig: {
+        dateFormat: 'YYYY-MM-DD',
+        docsDir: 'docs',
+        nav: [
+            {text: '首页', link: '/'},
+            {text: '归档', link: '/summary'},
+            {
+                text: '主题',
+                items: [
+                    {text: "系统重构", link: '/theme/2020-5-05-restruct'}
+                ]
+            },
+            {text: '关于我', link: '/about'},
+        ],
+        logo: 'http://storage.bytearch.com/images/demo.jpeg',
+        sidebar: {
+            '/theme/': [
+                {
+                    title: "千万级系统重构",
+                    sidebarDepth: 3,
+                    collapsable: false,
+                    children: [
+                        "/theme/2020-5-05-restruct.md"
+                    ]
+                }
+
+            ],
+            '/summary/': [
+                {
+                    title: "归档", collapsable: false
+                }
+            ],
+
+        },
+    },*/
+
+}

@@ -9,6 +9,8 @@ author: bytearch
 location: Beijing  
 summary: 基于openresty(nginx+lua) 轻量级灰度方案,支持流量控制!
 ---
+[[toc]]
+
 ## 1.为什么要灰度发布
 * 解决系统重构老系统向新系统平滑迁移
 * 按流量控制灰度,可以降低风险,有问题只影响极少了用户

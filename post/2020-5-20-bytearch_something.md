@@ -7,7 +7,7 @@ author: bytearch
 location: Beijing  
 summary: ​里程碑——浅谈架构技术博客正式发布。     
 ---
-
+[[toc]]
 
 ## 1、关于技术博客
 

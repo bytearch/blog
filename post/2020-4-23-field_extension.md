@@ -8,6 +8,8 @@ author: bytearch
 location: Beijing  
 summary: ​工作中我们常常有需求需要加字段,如果数据库数据量比较大,新增字段耗时较长,导致性能下降，甚至出现锁表等问题。       
 ---
+[[toc]]
+
 
 ## 1. 背景
 

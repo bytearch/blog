@@ -12,7 +12,7 @@ summary: mysql水平分库分表落地方案 解决亿级数据存储问题
 [[toc]]
 
 
-## 1、概述
+### 1、概述
 
 mysql分库分表一般有如下场景
 
@@ -23,7 +23,7 @@ mysql分库分表一般有如下场景
 
 其中1，2相对较容易实现,本文重点讲讲水平拆表和水平拆库,以及基于mybatis插件方式实现水平拆分方案落地。
 
-## 2、水平拆表
+### 2、水平拆表
 
 在[《聊一聊扩展字段设计》](http://blog.bytearch.com/2020/04/23/field-extension/) 一文中有讲解到基于KV水平存储扩展字段方案,这就是非常典型的可以水平分表的场景。主表和kv表是一对N关系,随着主表数据量增长,KV表最大N倍线性增长。
 
@@ -60,7 +60,7 @@ id % 512 = 2 .... 分到 kv_002
 
 ##### 3. 水平分表思路
 
-###### 先看看未拆分前sql语句
+ 先看看未拆分前sql语句
 
 1) insert 
 
@@ -74,7 +74,7 @@ insert into kv(id, key, value,create_time,type) value(1, "domain", "www.bytearch
 select id, key, value,create_time,type from kv where id = 1 and key = "domain";
 ```
 
-###### 我们可以通过动态更改sql语句表名,拆分后sql语句
+ 我们可以通过动态更改sql语句表名,拆分后sql语句
 
 1) insert 
 
@@ -90,7 +90,7 @@ select id, key, value,create_time,type from kv_001 where id = 1 and key = "domai
 
 水平分表相对比较容易,后面会讲到基于mybatis插件实现方案
 
-## 3、水平拆库
+### 3、水平拆库
 
 场景:以下我们基于博客文章表分库场景来分析
 
@@ -116,11 +116,11 @@ select id, key, value,create_time,type from kv_001 where id = 1 and key = "domai
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '订单信息表';
 ```
 
-##### 1)确定shardingKey
+#### 1)确定shardingKey
 
 按照user_id sharding
 
-##### 2) 确定分库数量
+#### 2) 确定分库数量
 
 假如分1024个库,按照user_id % 1024 hash
 
@@ -134,7 +134,7 @@ user_id % 1024 = 2 分到db_002库
 
 ![架构图](http://storage.bytearch.com/images/sharding_db.jpg)
 
-##### 4) 性能线性增长
+#### 4) 性能线性增长
 
 目前是2个节点,假如后期达到瓶颈,我们可以增加至4个节点
 
@@ -144,7 +144,7 @@ user_id % 1024 = 2 分到db_002库
 
 最多可以增加只1024个节点,性能线性增长
 
-##### 5) 非shardingKey查询问题
+#### 5) 非shardingKey查询问题
 
 对于水平分表/分库后,非shardingKey查询首先得考虑到
 
@@ -154,11 +154,11 @@ user_id % 1024 = 2 分到db_002库
 * nosql法: 将全量数据存到ES,查询ES
 
 
-## 4、基于mybatis插件水平分库分表
+### 4、基于mybatis插件水平分库分表
 
 基于mybatis分库分表,一般常用的一种是基于spring AOP方式, 另外一种基于mybatis插件。其实两种方式思路差不多。
 
-#####  基于mybatis分库得首先解决如下问题
+####  基于mybatis分库得首先解决如下问题
 
 * 1). 如何根据shardingKey选择不同的数据源
 
@@ -166,9 +166,9 @@ user_id % 1024 = 2 分到db_002库
 
 * 3). 在哪个阶段 更改sql语句(也就是需要更改库名&表名, 解决了问题1和问题2,问题3就很容易解决了)
 
-##### 问题1: 使用Spring的AbstractRoutingDataSource进行数据源的动态切换,原理是使用ThreadLocal先存储数据源key,等需要的的时候获取。
+#### 问题1: 使用Spring的AbstractRoutingDataSource进行数据源的动态切换,原理是使用ThreadLocal先存储数据源key,等需要的的时候获取。
 
-##### 问题2: 这个问题得先分析一下mybatis四大类和插件执行流程,也就是找出也就是分析Executor 和StatementHandler哪个在获取属于源之前执行
+#### 问题2: 这个问题得先分析一下mybatis四大类和插件执行流程,也就是找出也就是分析Executor 和StatementHandler哪个在获取属于源之前执行
 
 ![mybatis插件四大类](http://storage.bytearch.com/images/mybatis_plugin_4.jpg)
 
@@ -291,7 +291,7 @@ public class DynamicDatasource extends AbstractRoutingDataSource {
 
 由此可知,我们需要在Executor阶段 切换数据源
 
-##### 问题3: 可以在Executor切换完数据库完成之后, 更改sql, 或者在StatementHandler阶段更改sql
+#### 问题3: 可以在Executor切换完数据库完成之后, 更改sql, 或者在StatementHandler阶段更改sql
 
 对于分库:
 
@@ -769,7 +769,7 @@ select
 
 ```
 
-## 5、总结
+### 5、总结
 mysql分库分表,首先得找到瓶颈在哪里(IO or CPU),是分库还是分表,分多少？不能为了分库分表而拆分。
 原则上是尽量先垂直拆分 后 水平拆分。
 以上基于mybatis插件分库分表是一种实现思路,还有很多不完善的地方,
@@ -777,3 +777,7 @@ mysql分库分表,首先得找到瓶颈在哪里(IO or CPU),是分库还是分�
 * 目前sql是直接替换的,这里有很大隐患, 
 * 分库后,跨库事务的如何处理等等
 以上仅供参考!有其它思路可以欢迎联系我一起交流.
+
+### 6、 欢迎关注"浅谈架构"公众号、不定期分享精彩文章
+
+![浅谈架构](http://storage.bytearch.com/images/qrcode_demo_bytearch.jpg)

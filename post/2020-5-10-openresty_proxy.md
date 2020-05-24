@@ -11,11 +11,11 @@ summary: 基于openresty(nginx+lua) 轻量级灰度方案,支持流量控制!
 ---
 [[toc]]
 
-## 1.为什么要灰度发布
+### 1.为什么要灰度发布
 * 解决系统重构老系统向新系统平滑迁移
 * 按流量控制灰度,可以降低风险,有问题只影响极少了用户
 
-## 2.设计思路
+### 2.设计思路
 首先看看openresty指令执行顺序
 ![openresty](http://storage.bytearch.com/images/openresty.png)
 
@@ -37,7 +37,7 @@ summary: 基于openresty(nginx+lua) 轻量级灰度方案,支持流量控制!
 
  ![gray](http://storage.bytearch.com/images/gray.jpg)
  
-## 3.实现代码
+### 3.实现代码
 * 灰度配置文件
 ```lua
 -- Copyright (C) www.bytearch.com (iyw)
@@ -186,7 +186,7 @@ return _M
     return _M
 ```
 
-## 4.测试
+### 4.测试
 * test_old.conf 9001端口
 ```
 server{
@@ -258,7 +258,7 @@ server{
     error_log  logs/index_error.log info;
     charset utf-8;
     default_type 'text/html';
-    ## 注意: lua_code_cache需要设置为on
+    ### 注意: lua_code_cache需要设置为on
     lua_code_cache on;
 
     location ~* /(.*) {
@@ -287,6 +287,10 @@ openresty -c /usr/local/openresty/nginx/conf/nginx.conf
 测试如下
 ![test](http://storage.bytearch.com/images/gray_test.png)
 
-## 5.总结:
+### 5.总结:
   实际场景可能更为复杂,比如可能会根据请求参数灰度策略,这些都可以根据实际很容易情况定制开发。
 源代码请移步(https://github.com/bytearch/gray) 欢迎star,谢谢大家!
+
+### 6. 欢迎关注"浅谈架构"公众号、不定期分享精彩文章
+
+![浅谈架构](http://storage.bytearch.com/images/qrcode_demo_bytearch.jpg)

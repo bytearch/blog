@@ -11,17 +11,17 @@ summary: ​开源轻量级分布式文件系统Fastdfs Java-SDK的改造,主要
 [[toc]]
 
 
-## 1. 背景
+### 1. 背景
 
 ​	前段时间有幸参与到开源轻量级分布式文件系统Fastdfs Java-SDK的改造,主要是增加socket连接池功能
 
 ​    支持连接池和短连接两种方式,是否开启连接池可选(默认开启),短连接(用完即关闭)
 
-## 2. 如何实现
+### 2. 如何实现
 
 ​    调研了连接池下,网上很多socket连接池都是用Apache Commons Pool来实现的,个人感觉可能有点重,所以就完全原生代码实现连接池开发了。
 
-## 3. 实现代码
+### 3. 实现代码
 
 * socket连接类
 
@@ -360,4 +360,8 @@ public class ConnectionPool {
 以上代码已发布于fastdfs-client-java [V1.28](https://github.com/happyfish100/fastdfs-client-java/releases/tag/V1.28)版本
 
 更多具体实现及源码请查看:https://github.com/happyfish100/fastdfs-client-java/tree/master/src/main/java/org/csource/fastdfs/pool
+
+### 4、 欢迎关注"浅谈架构"公众号、不定期分享精彩文章
+
+![浅谈架构](http://storage.bytearch.com/images/qrcode_demo_bytearch.jpg)
 

@@ -2,7 +2,9 @@
 
 
 
-技术博客: http://www.bytearch.com
+官网: http://www.bytearch.com
+ 
+技术博客: http://blog.bytearch.com
 
 微信订阅号: 浅谈架构
 

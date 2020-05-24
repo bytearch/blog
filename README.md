@@ -21,7 +21,7 @@
 ### 4.生活点滴
 | 序号 |  标题  |
 |:----|:---|
-|01 |  [最近的那些事儿](hhttp://blog.bytearch.com/2020/05/20/bytearch-something/) |
+|01 |  [最近的那些事儿](http://blog.bytearch.com/2020/05/20/bytearch-something/) |
 
 ### 5.关于浅谈架构
 
